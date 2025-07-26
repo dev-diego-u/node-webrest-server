@@ -1,3 +1,6 @@
 .env
 keys/
 node_modules/
+status.md
+status.pdf
+status.jpeg
