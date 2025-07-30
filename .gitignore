@@ -5,5 +5,4 @@ status.md
 status.pdf
 status.jpeg
 /postgres
-/src/generated/prisma
 dist/
