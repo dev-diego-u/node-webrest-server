@@ -24,9 +24,11 @@ export class Server {
 
     //*middleware
     this.app.use(express.json()); // For parsing application/json
+    this.app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
     //*public folder
     // 1. Web server: servir el frontend
     this.app.use(express.static(this.publicPath));
+
     // 2. API server: servir la API
     this.app.use(this.routes);
 
