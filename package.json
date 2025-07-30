@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "build": "rimraf ./dist && tsc && npm run migrate:deploy",
-    "start": "npm run build && node dist/app.js",
+    "build": "rimraf ./dist && tsc",
+    "start": "npm run build && npm run migrate:deploy && node dist/app.js",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "postinstall": "npm run generate"
   },
   "keywords": [],
   "author": "",
