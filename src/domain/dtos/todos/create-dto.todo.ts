@@ -16,14 +16,14 @@ export class CreateTodoDto {
 
     const completedAtDate = completedAt ? new Date(completedAt) : undefined;
     // console.log(completedAtDate);
-    if (typeof completedAt === "string" && completedAt.trim() === "") {
-      return { success: false, error: "CompletedAt must not be empty" };
-    }
-    if (typeof text !== "string" || text.trim().length === 0) {
-      return { success: false, error: "Text must be a non-empty string" };
+    if (completedAtDate && isNaN(completedAtDate.getTime())) {
+      return { success: false, error: "CompletedAt must be a valid date" };
     }
     if (completedAt && !(completedAtDate instanceof Date)) {
       return { success: false, error: "CompletedAt must be a Date object" };
+    }
+    if (typeof text !== "string" || text.trim().length === 0) {
+      return { success: false, error: "Text must be a non-empty string" };
     }
 
     return {

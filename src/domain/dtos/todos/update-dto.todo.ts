@@ -3,18 +3,21 @@ export type UpdateTodoDtoResult =
   | { success: false; error: string };
 
 export class UpdateTodoDto {
-  private readonly text?: string;
-  private readonly completedAt?: Date;
+  public readonly id: number;
+  public readonly text?: string;
+  public readonly completedAt?: Date;
 
-  constructor(text?: string, completedAt?: Date) {
+  constructor(id: number, text?: string, completedAt?: Date) {
+    this.id = id;
     this.text = text;
     this.completedAt = completedAt;
   }
 
   static update(props: { [key: string]: any }): UpdateTodoDtoResult {
-    const { text, completedAt } = props;
-    // Validación de completedAt
-
+    const { id, text, completedAt } = props;
+    if (!id || isNaN(id)) {
+      return { success: false, error: "ID must be a valid number" };
+    }
     let completedAtDate = completedAt ? new Date(completedAt) : undefined;
     // console.log(completedAtDate);
     //if is not valid date
@@ -28,11 +31,11 @@ export class UpdateTodoDto {
     if (text && (typeof text !== "string" || text.trim().length === 0)) {
       return { success: false, error: "Text must be a non-empty string" };
     }
-    console.log(text, completedAtDate);
+    // console.log(text, completedAtDate);
 
     return {
       success: true,
-      data: new UpdateTodoDto(text, completedAtDate),
+      data: new UpdateTodoDto(id, text, completedAtDate),
     };
   }
 
