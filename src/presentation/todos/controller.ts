@@ -4,6 +4,7 @@ import { CreateTodoDto } from "../../domain/dtos";
 import { UpdateTodoDto } from "../../domain/dtos/todos/update-dto.todo";
 import {
   CreateTodo,
+  CustomError,
   DeleteTodo,
   GetTodo,
   GetTodos,
@@ -21,14 +22,20 @@ export class TodosController {
   //*dependencies injected
   constructor(private readonly todoRepository: TodoRepository) {}
 
+  private handleError = (res: Response, error: unknown) => {
+    if (error instanceof CustomError) {
+      return res.status(error.statusCode).json({ error: error.message });
+    }
+
+    // console.error("Unexpected error:", error);
+    return res.status(500).json({ error: "An unexpected error occurred" }); //traducido seria "Un error inesperado ha ocurrido"
+  };
+
   public getTodos = (req: Request, res: Response) => {
     new GetTodos(this.todoRepository)
       .execute()
       .then((todos) => res.json(todos))
-      .catch((error) => {
-        // console.error("Error fetching todos:", error);
-        res.status(400).json({ error: error.message });
-      });
+      .catch((error) => this.handleError(res, error));
   };
 
   public getTodoById = async (req: Request, res: Response) => {
@@ -36,10 +43,7 @@ export class TodosController {
     new GetTodo(this.todoRepository)
       .execute(id)
       .then((todo) => res.json(todo))
-      .catch((error) => {
-        // console.error("Error fetching todo:", error);
-        res.status(404).json({ error: error.message });
-      });
+      .catch((error) => this.handleError(res, error));
   };
 
   public createTodo = (req: Request, res: Response) => {
@@ -52,10 +56,7 @@ export class TodosController {
     new CreateTodo(this.todoRepository)
       .execute(createTodoDto)
       .then((todo) => res.status(201).json(todo))
-      .catch((error) => {
-        // console.error("Error creating todo:", error);
-        res.status(400).json({ error: error.message });
-      });
+      .catch((error) => this.handleError(res, error));
   };
 
   public updateTodo = (req: Request, res: Response) => {
@@ -72,10 +73,7 @@ export class TodosController {
     new UpdateTodo(this.todoRepository)
       .execute(updateTodoDto)
       .then((todo) => res.status(200).json(todo))
-      .catch((error) => {
-        // console.error("Error updating todo:", error);
-        res.status(404).json({ error: error.message });
-      });
+      .catch((error) => this.handleError(res, error));
   };
 
   public deleteTodo = (req: Request, res: Response) => {
@@ -85,9 +83,6 @@ export class TodosController {
     new DeleteTodo(this.todoRepository)
       .execute(id)
       .then((todo) => res.status(200).json(todo))
-      .catch((error) => {
-        // console.error("Error deleting todo:", error);
-        res.status(404).json({ error: error.message });
-      });
+      .catch((error) => this.handleError(res, error));
   };
 }

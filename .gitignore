@@ -1,4 +1,6 @@
 .env
+.env.test
+coverage/
 keys/
 node_modules/
 status.md

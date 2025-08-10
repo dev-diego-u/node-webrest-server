@@ -3,6 +3,7 @@ export * from "./dtos";
 export * from "./repositories/todo.repository";
 export * from "./datasources/todo.datasource";
 
+export * from "./errors/custom.error";
 export * from "./use-cases/todo/create-todo";
 export * from "./use-cases/todo/get-todos";
 export * from "./use-cases/todo/get-todo";

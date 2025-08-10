@@ -7,7 +7,7 @@ import { Server } from "./presentation/server";
 })();
 
 async function main() {
-  console.log("app.js");
+  // console.log("app.js");
   const server = new Server({
     port: envs.PORT,
     publicPath: envs.PUBLIC_PATH,

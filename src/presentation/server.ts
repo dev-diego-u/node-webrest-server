@@ -9,6 +9,7 @@ export interface Options {
 
 export class Server {
   private app = express();
+  private serverListener?: any;
   private readonly port: number;
   private readonly publicPath: string;
   private readonly routes: Router;
@@ -17,6 +18,13 @@ export class Server {
     this.port = port;
     this.publicPath = publicPath;
     this.routes = routes;
+  }
+
+  /**
+   * Devuelve la instancia de express app para pruebas (ej: supertest)
+   */
+  public getApp() {
+    return this.app;
   }
 
   async start() {
@@ -43,8 +51,14 @@ export class Server {
       res.sendFile(indexPath);
     });
 
-    this.app.listen(this.port, () => {
+    this.serverListener = this.app.listen(this.port, () => {
       console.log("Server is listening on port 3000");
     });
+  }
+
+  public close() {
+    if (this.serverListener) {
+      this.serverListener.close();
+    }
   }
 }
